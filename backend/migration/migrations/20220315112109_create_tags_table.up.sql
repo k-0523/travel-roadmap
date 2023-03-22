@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS tags (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
+    PRIMARY KEY (id)
+)

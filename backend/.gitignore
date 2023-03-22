@@ -1,0 +1,4 @@
+/tmp
+/vendor
+develop.env
+local.env

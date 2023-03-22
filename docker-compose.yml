@@ -1,0 +1,76 @@
+version: '3'
+services:
+  backend:
+    container_name: backend_container
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    links:
+      - mariadb
+    ports:
+      - 8000:8000
+    tty: true
+    command: sh -c 'go mod tidy; air'
+    volumes:
+      - ./backend:/backend/src/app
+
+  frontend:
+    container_name: frontend_container
+    build:
+      context: .
+      dockerfile: ./docker/frontend/Dockerfile
+    tty: true
+    volumes:
+      - ./frontend:/frontend/src/app
+      - node_modules_volume:/frontend/src/app/node_modules
+    command: sh -c "cd /frontend/src/app && yarn start-local"
+    ports:
+      - 3000:3000
+
+  nginx:
+    image: nginx
+    container_name: nginx_container
+    ports:
+      - 80:80
+    links:
+      - backend
+      - frontend
+    environment:
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/logs:/var/log/nginx
+
+  mariadb:
+    container_name: mariadb
+    image: mariadb:10
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: travel-roadmap
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_USER: root
+      PMA_PASSWORD: password
+      PMA_HOST: mariadb
+      PMA_VERBOSE: travel-roadmap
+      PMA_PORT: 3306
+    links:
+      - mariadb
+    ports:
+      - 1234:80
+    volumes:
+      - "./phpmyadmin/sessions:/sessions"
+
+  # smtp:
+  #   image: mailhog/mailhog
+  #   ports:
+  #     - "1025:1025"
+  #     - "8025:8025"
+
+volumes:
+  node_modules_volume:

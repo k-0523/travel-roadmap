@@ -1,0 +1,1 @@
+ALTER TABLE `schedule_details` DROP COLUMN `prefecture`, DROP COLUMN `city`, DROP COLUMN `country`;

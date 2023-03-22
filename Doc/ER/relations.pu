@@ -1,0 +1,45 @@
+@startuml
+/' users '/
+users ||-l-|| total_post_view_counts
+users ||-l-|| profiles
+users ||-u-o{ follows
+users ||-u-o{ follows
+users ||-d-o{ favorites
+users ||-d-o{ comments
+users ||-r-o{ posts
+users ||-d-{ views_histories
+users ||--o{ notifications
+
+/' posts '/
+posts ||-d-o{ favorites
+posts ||-d-o{ comments
+posts ||-d-{ views_histories
+posts ||-u-o{ posts_tags
+posts ||-d-o{ precautions
+posts ||-d-o{ baggages
+posts ||-d-o{ shoppings_lists
+posts ||-r-|{ schedules
+posts ||--o{ notifications
+
+/' comments '/
+comments ||--|| notifications
+
+/' schedules '/
+schedules ||-|{ schedules_details
+schedules ||--|{ travels_destinations
+
+/' travels_destinations '/
+travels_destinations ||-|| m_geographies
+
+/' schedules_details '/
+schedules_details ||-|{ schedules_details_images
+
+/' tags '/
+tags ||-lo{ posts_tags
+
+/' m_geographies '/
+m_geographies ||--|| m_countries
+m_geographies ||--|| m_prefectures
+m_geographies ||--|| m_cities
+
+@enduml

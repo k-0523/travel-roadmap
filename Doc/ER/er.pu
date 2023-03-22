@@ -1,0 +1,4 @@
+@startuml
+  !include entities.pu
+  !include relations.pu
+@enduml

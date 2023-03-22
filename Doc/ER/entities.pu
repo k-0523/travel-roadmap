@@ -1,0 +1,267 @@
+@startuml
+entity "sessions セッション" as sessions {
+    * session_id (PK)
+    --
+    session: TEXT
+    user_Id: INT(8)
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "admin_accounts 管理者" as admin_accounts {
+    * admin_account_id (PK)
+    --
+    * email: VARCHAR(255) [メールアドレス]
+    password: VARCHAR(100) [パスワード]
+	data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "users ユーザー" as users {
+    * id (PK)
+    --
+    * user_name: VARCHAR(50) [ユーザーネーム]
+    * email: VARCHAR(255) [メールアドレス]
+    birthday: DATE [誕生日]
+    password: VARCHAR(100) [パスワード]
+    password_token: VARCHAR(255)
+    password_token_limit: TIMESTAMP
+	user_status VARCHAR(100) [1(仮会員),2(本会員),3(退会済み会員)]
+	is_private: TINYINT(1) [非公開かどうか]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "user_profiles プロフィール" as user_profiles {
+    * id (PK)
+    --
+    # user_id: (FK[users, id])
+    name: VARCHAR(50) [お名前]
+    introduce: VARCHAR(255) [自己紹介]
+    url: VARCHAR(255) [URL]
+    image_path: TEXT [プロフィール画像パス]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "total_post_view_counts 閲覧数" as total_post_view_counts {
+    * total_view_post_id (PK)
+    --
+    # user_id: (FK[users, id])
+    # total_count: INT [閲覧総数]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "follows フォロー" as follows {
+    * id (PK)
+    --
+    # follow_id: (FK[users, id])
+    # follower_id: (FK[users, id])
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "comments コメント" as comments {
+    * id (PK)
+    --
+    # user_id: (FK[users, id])
+    # post_id: (FK[posts, id])
+    comment: VARCHAR(255) [コメント]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "favorites いいね" as favorites {
+    * id (PK)
+    --
+    # user_id: (FK[users, id])
+    # post_id: (FK[posts, id])
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "notifications 通知" as notifications {
+    * id (PK)
+    --
+    # visiter_id: (FK[users, id])
+    # visited_id: (FK[users, id])
+    # post_id: (FK[posts, id])
+    # comment_id: (FK[comments, id])
+    action VARCHAR(10) [follow,like,comment]
+    checked TINYINT(1) [確認したか]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "views_histories 履歴" as views_histories {
+    * id (PK)
+    --
+    # user_id: (FK[users, id])
+    # post_id: (FK[posts, id])
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "posts 投稿" as posts {
+    * id (PK)
+    --
+    # user_id: (FK[users, id])
+    title: VARCHAR(50) [タイトル]
+    view_count INT(11)
+    image_path: TEXT [サムネイル画像パス]
+    from_date: DATE [開始日付]
+    to_date DATE: [終了日時]
+    nitghts: TINYINT(2) [泊]
+    days: TINYINT(2) [日]
+    accompany_person_category: TINYINT(1) [同行者ジャンル]
+    number_of_person: TINYINT(2) [同行者数]
+    budget: INT(10) [予算]
+    currency: TINYINT(2) [通貨]
+    depature_country: TINYINT(3) [出発国]
+    depature_prefecture: TINYINT(2) [出発都道府県]
+    depature_city: VARCHAR(20) [出発市]
+    thought: VARCHAR(255) [感想]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "post_tags タグ" as post_tags {
+    * id (PK)
+    --
+    # post_id: (FK[posts, id])
+    # tag_id: (FK[tags, id])
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "tags タグ" as tags {
+    * id (PK)
+    --
+    name:VARCHAR(50) [タグ名]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "precautions 注意事項" as precautions {
+    * id (PK)
+    --
+    # post_id (FK[posts, id])
+    precaution VARCHAR(255) [注意事項]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at TIMESTAMP [作成日時]
+    updated_at TIMESTAMP [更新日時]
+}
+
+entity "baggages 持ち物" as baggages {
+    * id (PK)
+    --
+    # post_id (FK[posts, id])
+    name VARCHAR(255) [持ち物名前]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at TIMESTAMP [作成日時]
+    updated_at TIMESTAMP [更新日時]
+}
+
+entity "shopping_lists 買い物リスト" as shopping_lists {
+    * id (PK)
+    --
+    # post_id (FK[posts, id])
+    name VARCHAR(255) [商品名]
+    memo VARCHAR(255) [メモ]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at TIMESTAMP [作成日時]
+    updated_at TIMESTAMP [更新日時]
+}
+
+entity "schedules スケジュール" as schedules {
+    * id (PK)
+    --
+    # post_id: (FK[posts, id])
+    day: DATE [日]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "travel_destinations 旅行先" as travel_destinations {
+    * id (PK)
+    --
+    # schedule_id: (FK[schedules, id])
+    # geographiy_id: (FK[m_geographies, geographiy_id])
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "schedule_details スケジュール詳細" as schedule_details {
+    * id (PK)
+    --
+    # schedule_id: (FK[schedules, id])
+    # schedules_detail_image_id: (FK[schedules_details_images, schedules_detail_image_id])
+    time: TIME [時刻]
+    transportation: TINYINT(2) [交通手段]
+    title: VARCHAR(50) [タイトル]
+    place: VARCHAR(150) [場所]
+    url: VARCHAR(255) [URL]
+    content: VARCHAR(255) [内容]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "schedule_detail_images スケジュール詳細画像" as schedule_detail_images {
+    * id (PK)
+    --
+    # schedule_detail_id: (FK[schedules, id])
+    image_path: TEXT [画像1パス]
+    image_name: VARCHAR(255)
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "m_geographies 地理マスタ" as m_geographies {
+    * geographiy_id (PK)
+    --
+    country_id: TINYINT(3) (FK[m_countries, id])
+    prefecture_id (FK[m_prefectures], prefecture_id)
+    city_id (FK[m_cities], city_id)
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "m_countries 国マスタ" as m_countries {
+    * country_id (PK)
+    --
+	country_name: VARCHAR(255) [国]
+	country_code: VARCHAR(255) [国コード]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "m_prefectures 県マスタ" as m_prefectures {
+    * prefecture_id (PK)
+    --
+	prefecture_name: VARCHAR(255) [県]
+	prefecture_code: VARCHAR(255) [県コード]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+
+entity "m_cities 市マスタ" as m_cities {
+    * city_id (PK)
+    --
+	city_name: VARCHAR(255) [市]
+	city_code: VARCHAR(255) [市コード]
+    data_status: TINYINT(1) [1(有効),9(無効)]
+    created_at: TIMESTAMP [作成日時]
+    updated_at: TIMESTAMP [更新日時]
+}
+@enduml
