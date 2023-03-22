@@ -1,7 +1,7 @@
 @startuml
 /' users '/
 users ||-l-|| total_post_view_counts
-users ||-l-|| profiles
+users ||-l-|| user_profiles
 users ||-u-o{ follows
 users ||-u-o{ follows
 users ||-d-o{ favorites
@@ -14,10 +14,10 @@ users ||--o{ notifications
 posts ||-d-o{ favorites
 posts ||-d-o{ comments
 posts ||-d-{ views_histories
-posts ||-u-o{ posts_tags
+posts ||-u-o{ post_tags
 posts ||-d-o{ precautions
 posts ||-d-o{ baggages
-posts ||-d-o{ shoppings_lists
+posts ||-d-o{ shopping_lists
 posts ||-r-|{ schedules
 posts ||--o{ notifications
 
@@ -25,17 +25,17 @@ posts ||--o{ notifications
 comments ||--|| notifications
 
 /' schedules '/
-schedules ||-|{ schedules_details
-schedules ||--|{ travels_destinations
+schedules ||-|{ schedule_details
+schedules ||--|{ travel_destinations
 
 /' travels_destinations '/
-travels_destinations ||-|| m_geographies
+travel_destinations ||-|| m_geographies
 
-/' schedules_details '/
-schedules_details ||-|{ schedules_details_images
+/' schedule_detail_images '/
+schedule_details ||-|{ schedule_detail_images
 
 /' tags '/
-tags ||-lo{ posts_tags
+tags ||-lo{ post_tags
 
 /' m_geographies '/
 m_geographies ||--|| m_countries

@@ -8,15 +8,15 @@ entity "sessions セッション" as sessions {
     updated_at: TIMESTAMP [更新日時]
 }
 
-entity "admin_accounts 管理者" as admin_accounts {
-    * admin_account_id (PK)
-    --
-    * email: VARCHAR(255) [メールアドレス]
-    password: VARCHAR(100) [パスワード]
-	data_status: TINYINT(1) [1(有効),9(無効)]
-    created_at: TIMESTAMP [作成日時]
-    updated_at: TIMESTAMP [更新日時]
-}
+' entity "admin_accounts 管理者" as admin_accounts {
+'     * admin_account_id (PK)
+'     --
+'     * email: VARCHAR(255) [メールアドレス]
+'     password: VARCHAR(100) [パスワード]
+' 	data_status: TINYINT(1) [1(有効),9(無効)]
+'     created_at: TIMESTAMP [作成日時]
+'     updated_at: TIMESTAMP [更新日時]
+' }
 
 entity "users ユーザー" as users {
     * id (PK)
