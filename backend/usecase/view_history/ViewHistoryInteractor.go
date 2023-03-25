@@ -5,6 +5,9 @@ import (
 	"travel-roadmap/backend/usecase"
 )
 
+/************************
+* ビジネスロジック層
+************************/
 type ViewHistoryInteractor struct {
 	DB          usecase.DBRepository
 	ViewHistory ViewHistoryRepository

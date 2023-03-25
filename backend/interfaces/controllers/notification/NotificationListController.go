@@ -24,7 +24,6 @@ func NewNotificationListController(db database.DB) *NotificationListController {
 }
 
 func (c *NotificationListController) Exec(ctx controllers.Context) {
-
 	/* -----------------------------------
 	* 認証情報の取得
 	----------------------------------- */

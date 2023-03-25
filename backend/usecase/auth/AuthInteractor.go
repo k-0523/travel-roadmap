@@ -5,6 +5,9 @@ import (
 	"travel-roadmap/backend/usecase"
 )
 
+/************************
+* ビジネスロジック層
+************************/
 type AuthInteractor struct {
 	DB   usecase.DBRepository
 	Auth AuthRepository

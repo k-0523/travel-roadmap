@@ -5,6 +5,9 @@ import (
 	usecase "travel-roadmap/backend/usecase"
 )
 
+/************************
+* ビジネスロジック層
+************************/
 type CommentInteractor struct {
 	DB      usecase.DBRepository
 	Comment CommentRepository

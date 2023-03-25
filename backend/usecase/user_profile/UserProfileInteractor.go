@@ -6,6 +6,9 @@ import (
 	"travel-roadmap/backend/usecase"
 )
 
+/************************
+* ビジネスロジック層
+************************/
 type UserProfileInteractor struct {
 	DB          usecase.DBRepository
 	UserProfile UserProfileRepository

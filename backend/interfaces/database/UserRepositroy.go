@@ -13,25 +13,20 @@ import (
 type UserRepositroy struct{}
 
 // infrastructureに依存するレイヤー
-
 func (r *UserRepositroy) Delete(db *gorm.DB, user domain_user.User) error {
-
 	if err := db.Debug().Delete(&user).Error; err != nil {
 		return err
 	}
-
 	return nil
 }
 
 func (r *UserRepositroy) ExistsPasswordToken(db *gorm.DB, user *domain_user.PasswordConfirm) (exists bool, err error) {
-
 	err = db.Model(domain_user.User{}).Debug().
 		Where("password_token = ?", user.PasswordToken).
 		First(&exists).
 		Error
 
 	if err != nil {
-
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil
 		}
@@ -40,7 +35,6 @@ func (r *UserRepositroy) ExistsPasswordToken(db *gorm.DB, user *domain_user.Pass
 }
 
 func (r *UserRepositroy) UpdatePassowrd(db *gorm.DB, user *domain_user.UpdateUserPassword) error {
-
 	if err := db.Model(&domain_user.User{}).
 		Where("user_id = ? ", user.UserId).
 		Update("password", user.NewPassword).Error; err != nil {
@@ -50,7 +44,6 @@ func (r *UserRepositroy) UpdatePassowrd(db *gorm.DB, user *domain_user.UpdateUse
 }
 
 func (r *UserRepositroy) UpdateUserName(db *gorm.DB, user *domain_user.UpdateUserName) error {
-
 	if err := db.Model(&domain_user.User{}).
 		Where("user_id = ? ", user.UserId).
 		Update("UserName", user.UserName).Error; err != nil {
@@ -60,7 +53,6 @@ func (r *UserRepositroy) UpdateUserName(db *gorm.DB, user *domain_user.UpdateUse
 }
 
 func (r *UserRepositroy) UpdateEmail(db *gorm.DB, user *domain_user.UpdateEmail) error {
-
 	if err := db.Debug().Model(&domain_user.User{}).
 		Where("user_id = ? ", user.UserId).
 		Updates(map[string]interface{}{"new_email": user.NewEmail, "new_email_verify_token": user.NewEmailVerifyToken}).Error; err != nil {
@@ -70,7 +62,6 @@ func (r *UserRepositroy) UpdateEmail(db *gorm.DB, user *domain_user.UpdateEmail)
 }
 
 func (r *UserRepositroy) PasswordConfirm(db *gorm.DB, user *domain_user.PasswordConfirm) error {
-
 	if err := db.Debug().Model(&domain_user.User{}).
 		Where("password_token = ? ", user.PasswordToken).
 		Updates(map[string]interface{}{
@@ -84,7 +75,6 @@ func (r *UserRepositroy) PasswordConfirm(db *gorm.DB, user *domain_user.Password
 }
 
 func (r *UserRepositroy) UpdatePrivate(db *gorm.DB, user *domain_user.User, updateFlag int) error {
-
 	if err := db.Debug().Model(&domain_user.User{}).
 		Where("user_id = ? ", user.UserId).
 		Update("IsPrivate", updateFlag).Error; err != nil {
@@ -94,14 +84,12 @@ func (r *UserRepositroy) UpdatePrivate(db *gorm.DB, user *domain_user.User, upda
 }
 
 func (r *UserRepositroy) ExistsUserName(db *gorm.DB, user *domain_user.UpdateUserName) (exists bool, err error) {
-
 	err = db.Model(domain_user.User{}).Debug().
 		Where("user_name = ? and user_id <> ?", user.UserName, user.UserId).
 		First(&exists).
 		Error
 
 	if err != nil {
-
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil
 		}
@@ -110,14 +98,12 @@ func (r *UserRepositroy) ExistsUserName(db *gorm.DB, user *domain_user.UpdateUse
 }
 
 func (r *UserRepositroy) ExistsEmail(db *gorm.DB, user *domain_user.UpdateEmail) (exists bool, err error) {
-
 	err = db.Model(domain_user.User{}).Debug().
 		Where("email = ? or new_email = ? and user_id <> ?", user.NewEmail, user.NewEmail, user.UserId).
 		First(&exists).
 		Error
 
 	if err != nil {
-
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil
 		}
@@ -126,14 +112,12 @@ func (r *UserRepositroy) ExistsEmail(db *gorm.DB, user *domain_user.UpdateEmail)
 }
 
 func (r *UserRepositroy) ExistsTmpEmail(db *gorm.DB, user *domain_user.User) (exists bool, err error) {
-
 	err = db.Model(domain_user.User{}).Debug().
 		Where("email = ? or new_email = ? ", user.Email, user.Email).
 		First(&exists).
 		Error
 
 	if err != nil {
-
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil
 		}
@@ -143,7 +127,6 @@ func (r *UserRepositroy) ExistsTmpEmail(db *gorm.DB, user *domain_user.User) (ex
 
 // ハッシュ化したパスワードとマッチ判定
 func (r *UserRepositroy) MatchHashedPassword(db *gorm.DB, user *domain_user.UpdateUserPassword) error {
-
 	var exists bool
 	err := db.Model(domain_user.User{}).Debug().
 		Where("user_id = ? and password = ?", user.UserId, user.Password).
@@ -151,14 +134,12 @@ func (r *UserRepositroy) MatchHashedPassword(db *gorm.DB, user *domain_user.Upda
 		Error
 
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-
 		return err
 	}
 	return nil
 }
 
 func (r *UserRepositroy) Create(db *gorm.DB, user *domain_user.User) (err error) {
-
 	if err := db.Create(&user).Error; err != nil {
 		return err
 	}
@@ -166,7 +147,6 @@ func (r *UserRepositroy) Create(db *gorm.DB, user *domain_user.User) (err error)
 }
 
 func (r *UserRepositroy) Find(db *gorm.DB, userId int) (user domain_user.User, err error) {
-	// 型指定しているからSQLインジェクションは大丈夫なはず
 	if err := db.
 		Joins("UserProfile").
 		Find(&user, "users.user_id = ?", userId).Error; err != nil {
@@ -186,9 +166,7 @@ func (r *UserRepositroy) FindByUUID(db *gorm.DB, user domain_user.User) (err err
 }
 
 func (r *UserRepositroy) FindForSignIn(db *gorm.DB, u domain_user.User) (domain_user.User, error) {
-
 	if err := db.Model(domain_user.User{}).Where("email = ? AND user_status = ?", u.Email, consts.CODE_USER_STATUS_REGISTERD).First(&u).Error; err != nil {
-
 		return u, err
 	}
 
@@ -197,7 +175,6 @@ func (r *UserRepositroy) FindForSignIn(db *gorm.DB, u domain_user.User) (domain_
 
 // NOTE: ここに書くべきじゃない
 func (r *UserRepositroy) CreateSession(db *gorm.DB, session domain_user_session.UserSession) error {
-
 	if err := db.Create(&session).Error; err != nil {
 		return err
 	}
@@ -207,7 +184,6 @@ func (r *UserRepositroy) CreateSession(db *gorm.DB, session domain_user_session.
 
 // NOTE: ここに書くべきじゃない（ログアウト用）
 func (r *UserRepositroy) DeleteSession(db *gorm.DB, session domain_user_session.UserSession) error {
-
 	if err := db.Delete(&session).Error; err != nil {
 		return err
 	}
@@ -238,7 +214,6 @@ func (r *UserRepositroy) Exists(db *gorm.DB, userId int) (exists bool, err error
 }
 
 func (r *UserRepositroy) ExistsTmpUser(db *gorm.DB, uuid string) (exists bool, err error) {
-
 	err = db.Model(domain_user.User{}).
 		Where("tmp_register_uuid = ? AND user_status = ? ", uuid, consts.CODE_USER_STATUS_TMP).
 		First(&exists).
@@ -253,7 +228,6 @@ func (r *UserRepositroy) ExistsTmpUser(db *gorm.DB, uuid string) (exists bool, e
 	return true, nil
 }
 func (r *UserRepositroy) ConfirmTmpUser(db *gorm.DB, uuid string) (err error) {
-
 	if err := db.Model(&domain_user.User{}).
 		Where("tmp_register_uuid = ? ", uuid).
 		Updates(map[string]interface{}{
@@ -267,7 +241,6 @@ func (r *UserRepositroy) ConfirmTmpUser(db *gorm.DB, uuid string) (err error) {
 }
 
 func (r *UserRepositroy) PasswordReset(db *gorm.DB, password *domain_user.PasswordSetting) (err error) {
-
 	if err := db.Debug().Model(&domain_user.User{}).
 		Where("email = ? ", password.Email).
 		Update("PasswordToken", password.PasswordToken); err != nil && err.RowsAffected != 0 {
@@ -278,7 +251,6 @@ func (r *UserRepositroy) PasswordReset(db *gorm.DB, password *domain_user.Passwo
 }
 
 func (r *UserRepositroy) ConfirmNewEmail(db *gorm.DB, uuid string) (err error) {
-
 	if err := db.Model(&domain_user.User{}).
 		Where("new_email_verify_token = ? ", uuid).
 		Updates(map[string]interface{}{

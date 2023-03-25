@@ -111,40 +111,47 @@ func (r *Routing) setRouting() {
 		listFollowerController := follow.NewListFollowerController(r.DB)
 		uAuth.GET("/follower/:userId", func(ctx *gin.Context) { listFollowerController.Exec(ctx) })
 
-		fileController := aws.NewFileController()
-		uAuth.POST("/file/upload", func(c *gin.Context) { fileController.Upload(c) })
+		uploadFileController := aws.NewUploadFileController()
+		uAuth.POST("/file/upload", func(c *gin.Context) { uploadFileController.Exec(c) })
 
 		// 投稿一覧
-		contentController := content.NewContentController(r.DB)
-		uAuth.POST("/content/list", func(c *gin.Context) { contentController.Get(c) })
-		uAuth.POST("/content/search", func(c *gin.Context) { contentController.Search(c) })
+		fetchContentController := content.NewFetchContentController(r.DB)
+		uAuth.POST("/content/list", func(c *gin.Context) { fetchContentController.Exec(c) })
+		searchContentController := content.NewSearchContentController(r.DB)
+		uAuth.POST("/content/search", func(c *gin.Context) { searchContentController.Exec(c) })
 
 		// ユーザーIDをもとに投稿を取得
 		listUserContentController := content.NewListUserContentController(r.DB)
 		uAuth.GET("/content/:userId", func(c *gin.Context) { listUserContentController.Exec(c) })
 
 		// 投稿のCRUD
-		contentDetailController := content.NewContentDetailController(r.DB)
-		uAuth.POST("/content-detail/create", func(c *gin.Context) { contentDetailController.Create(c) })
-		uAuth.POST("/content-detail/view", func(c *gin.Context) { contentDetailController.Get(c) })
-		uAuth.POST("/content-detail/update", func(c *gin.Context) { contentDetailController.Update(c) })
-		uAuth.POST("/content-detail/delete", func(c *gin.Context) { contentDetailController.Delete(c) })
+		postContentDetailController := content.NewPostContentDetailController(r.DB)
+		uAuth.POST("/content-detail/create", func(c *gin.Context) { postContentDetailController.Exec(c) })
+		fetchContentDetailController := content.NewFetchContentDetailController(r.DB)
+		uAuth.POST("/content-detail/view", func(c *gin.Context) { fetchContentDetailController.Exec(c) })
+		updateContentDetailController := content.NewUpdateContentDetailController(r.DB)
+		uAuth.POST("/content-detail/update", func(c *gin.Context) { updateContentDetailController.Exec(c) })
+		deleteContentDetailController := content.NewDeleteContentDetailController(r.DB)
+		uAuth.POST("/content-detail/delete", func(c *gin.Context) { deleteContentDetailController.Exec(c) })
 
-		commentController := comment.NewCommentController(r.DB)
-		uAuth.POST("/comment/create", func(c *gin.Context) { commentController.Create(c) })
-		uAuth.GET("/comment/list", func(c *gin.Context) { commentController.GetCommentList(c) })
-		uAuth.POST("/comment/count", func(c *gin.Context) { commentController.GetCountComments(c) })
+		postCommentController := comment.NewPostCommentController(r.DB)
+		uAuth.POST("/comment/create", func(c *gin.Context) { postCommentController.Exec(c) })
+		fetchCommentController := comment.NewFetchCommentController(r.DB)
+		uAuth.GET("/comment/list", func(c *gin.Context) { fetchCommentController.Exec(c) })
+		countCommentController := comment.NewCountCommentController(r.DB)
+		uAuth.POST("/comment/count", func(c *gin.Context) { countCommentController.Exec(c) })
 
 		// いいね機能
 		favoriteController := favorite.NewFavoriteController(r.DB)
-		uAuth.POST("/favorite/update", func(c *gin.Context) { favoriteController.UpdateFavorite(c) })
-		uAuth.POST("/favorite/count", func(c *gin.Context) { favoriteController.GetCountFavorites(c) })
+		uAuth.POST("/favorite/update", func(c *gin.Context) { favoriteController.Exec(c) })
+		countFavoriteController := favorite.NewCountFavoriteController(r.DB)
+		uAuth.POST("/favorite/count", func(c *gin.Context) { countFavoriteController.Exec(c) })
 		listFavoriteController := favorite.NewListFavoriteController(r.DB)
 		uAuth.GET("/favoriete/:userId/contents", func(c *gin.Context) { listFavoriteController.Exec(c) })
 
 		// 閲覧履歴
-		viewHistoryController := view_history.NewViewHistoryController(r.DB)
-		uAuth.GET("/view-history/list", func(c *gin.Context) { viewHistoryController.Get(c) })
+		fetchViewHistoryController := view_history.NewFetchViewHistoryController(r.DB)
+		uAuth.GET("/view-history/list", func(c *gin.Context) { fetchViewHistoryController.Exec(c) })
 		// ログアウトAPI
 		signOutController := auth.NewSignOutController(r.DB)
 		uAuth.POST("/signout", func(ctx *gin.Context) { signOutController.Exec(ctx) })

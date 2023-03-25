@@ -13,10 +13,6 @@ type FavoriteController struct {
 	Interactor favorite_usecase.FavoriteInteractor
 }
 
-type RequestFavorite struct {
-	PostID int `json:"postID"`
-}
-
 type ResponseFavorite struct {
 	PostID int   `json:"postID"`
 	Status bool  `json:"status"`
@@ -32,7 +28,8 @@ func NewFavoriteController(db database.DB) *FavoriteController {
 	}
 }
 
-func (controller *FavoriteController) UpdateFavorite(c controllers.Context) {
+// いいね
+func (controller *FavoriteController) Exec(c controllers.Context) {
 	loginUser, _ := c.Get("loginUser")
 	user, _ := loginUser.(domain_user.User)
 	var favorite domain_favorite.Favorite
@@ -55,18 +52,4 @@ func (controller *FavoriteController) UpdateFavorite(c controllers.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, controllers.NewH("success", ResponseFavorite{favorite.PostID, result, count}))
-}
-
-func (controller *FavoriteController) GetCountFavorites(c controllers.Context) {
-	var rf RequestFavorite
-	if err := c.ShouldBindJSON(&rf); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, controllers.NewH(err.Error(), nil))
-		return
-	}
-	count, err := controller.Interactor.GetCountFavorites(rf.PostID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, controllers.NewH(err.Error(), nil))
-		return
-	}
-	c.JSON(http.StatusOK, controllers.NewH("success", count))
 }

@@ -5,6 +5,9 @@ import (
 	usecase "travel-roadmap/backend/usecase"
 )
 
+/************************
+* ビジネスロジック層
+************************/
 type FavoriteInteractor struct {
 	DB       usecase.DBRepository
 	Favorite FavoriteRepository

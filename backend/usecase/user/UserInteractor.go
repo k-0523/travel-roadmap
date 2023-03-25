@@ -12,7 +12,6 @@ import (
 /************************
 * ビジネスロジック層
 ************************/
-
 type UserInteractor struct {
 	DB   usecase.DBRepository
 	User UserRepositroy

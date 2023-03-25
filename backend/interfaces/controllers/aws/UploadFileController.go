@@ -6,10 +6,10 @@ import (
 	utils "travel-roadmap/backend/utils"
 )
 
-type FileController struct{}
+type UploadFileController struct{}
 
-func NewFileController() *FileController {
-	return &FileController{}
+func NewUploadFileController() *UploadFileController {
+	return &UploadFileController{}
 }
 
 type Response struct {
@@ -17,7 +17,7 @@ type Response struct {
 	SignedUrl string `json:"signedUrl"`
 }
 
-func (controller *FileController) Upload(c controllers.Context) {
+func (controller *UploadFileController) Exec(c controllers.Context) {
 	awsS3 := utils.NewAwsS3()
 
 	fileHeader, err := c.FormFile("image")

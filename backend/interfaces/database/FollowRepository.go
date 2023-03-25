@@ -62,8 +62,6 @@ func (r *FollowRepository) SearchFollowingUsers(db *gorm.DB, userId int) (users 
 }
 
 func (r *FollowRepository) SearchFollowingUsersWithCount(db *gorm.DB, userId int, loginUserId int) (users []domain_follow.FollowingUsersWithCount, err error) {
-
-	// todo:paging
 	err = db.Debug().Table("follows as f").
 		Select(fmt.Sprintf(`f.follow_user_id,f.follower_user_id,users.user_id,user_profiles.image_path, users.email,users.user_name ,(
 			select
@@ -80,30 +78,6 @@ func (r *FollowRepository) SearchFollowingUsersWithCount(db *gorm.DB, userId int
 		Scan(&users).
 		Error
 
-	/*
-
-		select
-			f.follow_user_id,
-			f.follower_user_id,
-			(
-				select
-					count(*)
-				from
-					follows
-				where
-					follower_user_id = f.follower_user_id
-				and follow_user_id = 9
-			) as count
-		from
-			follows as f
-			JOIN
-				users
-			ON  users.user_id = f.follower_user_id
-		where
-			f.follow_user_id = 6
-		;
-
-	*/
 	if err != nil {
 		return users, err
 	}

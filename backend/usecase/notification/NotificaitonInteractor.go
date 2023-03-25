@@ -6,6 +6,9 @@ import (
 	"travel-roadmap/backend/usecase"
 )
 
+/************************
+* ビジネスロジック層
+************************/
 type NotificationInteractor struct {
 	DB           usecase.DBRepository
 	Notification NotificationRepository

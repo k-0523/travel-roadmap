@@ -8,12 +8,12 @@ import (
 	view_history_usecase "travel-roadmap/backend/usecase/view_history"
 )
 
-type ViewHistoryController struct {
+type FetchViewHistoryController struct {
 	Interactor view_history_usecase.ViewHistoryInteractor
 }
 
-func NewViewHistoryController(db database.DB) *ViewHistoryController {
-	return &ViewHistoryController{
+func NewFetchViewHistoryController(db database.DB) *FetchViewHistoryController {
+	return &FetchViewHistoryController{
 		Interactor: view_history_usecase.ViewHistoryInteractor{
 			DB:          &database.DBRepository{DB: db},
 			ViewHistory: &database.ViewHistoryRepository{},
@@ -21,7 +21,7 @@ func NewViewHistoryController(db database.DB) *ViewHistoryController {
 	}
 }
 
-func (controller *ViewHistoryController) Get(c controllers.Context) {
+func (controller *FetchViewHistoryController) Exec(c controllers.Context) {
 	loginUser, _ := c.Get("loginUser")
 	user, _ := loginUser.(domain_user.User)
 

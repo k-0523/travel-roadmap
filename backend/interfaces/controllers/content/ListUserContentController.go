@@ -21,14 +21,10 @@ func NewListUserContentController(db database.DB) *ListUserContentController {
 	}
 }
 
+// userIdに紐づく投稿を取得
 func (controller *ListUserContentController) Exec(c controllers.Context) {
-
 	Id := c.Param("userId")
 	userId, _ := strconv.Atoi(Id)
-
-	/* -----------------------------------
-	* main logic
-	----------------------------------- */
 	posts, err := controller.Interactor.SearchByUserId(userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, controllers.NewH(err.Error(), nil))
